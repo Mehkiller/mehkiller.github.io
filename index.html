@@ -1,61 +1,370 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Silken Haven - Kate RPG</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Silken Haven — Kate</title>
+<meta name="theme-color" content="#0b0b0f"/>
 <style>
-  body {
-    background-color: #111;
-    color: #eee;
-    font-family: 'Trebuchet MS', sans-serif;
-    padding: 20px;
-    max-width: 600px;
-    margin: auto;
-  }
-  button {
-    background-color: #ff69b4;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    margin-top: 10px;
-    font-size: 1em;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  button:hover {
-    background-color: #ff85c1;
-  }
+  :root{--bg:#0b0b0f;--fg:#f5f5f7;--mut:#b0b0bb;--panel:#121218;--edge:#232330;--pink:#ff5ca8}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:ui-sans-serif,system-ui,Segoe UI,Inter,Roboto,Helvetica,Arial}
+  .wrap{max-width:760px;margin:0 auto;padding:16px 16px 120px}
+  h1{font-size:38px;margin:8px 0 4px}
+  .sub{color:var(--mut)}
+  .panel{background:rgba(18,18,24,.7);border:1px solid var(--edge);border-radius:16px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);margin-top:12px}
+  .choices{display:grid;gap:10px;margin-top:8px}
+  button.choice{width:100%;text-align:left;border:1px solid var(--edge);background:#0f0f15;color:var(--fg);padding:12px 14px;border-radius:12px;font-size:16px}
+  button.choice:active{transform:scale(.99)}
+  .top{position:sticky;top:0;background:linear-gradient(180deg,rgba(11,11,15,.88),rgba(11,11,15,0));padding:6px 0 2px;backdrop-filter:blur(6px);z-index:5}
+  .hud{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .chip{padding:6px 10px;border:1px solid var(--edge);border-radius:999px;background:#14141a;color:var(--mut);font-size:12px}
+  .meter{flex:1;min-width:180px}
+  .bar{height:8px;border:1px solid #242432;background:#15151c;border-radius:999px;overflow:hidden}
+  .fill{height:100%;background:var(--pink);width:50%}
+  .sprite{display:flex;justify-content:center;margin-top:8px;filter:drop-shadow(0 12px 28px rgba(0,0,0,.7))}
+  .sprite svg{width:min(68vw,380px);height:auto;opacity:.96}
+  .log{font-size:15px;line-height:1.55;color:#e6e6ed;white-space:pre-wrap}
+  .hint{color:var(--mut);font-size:12px}
+  .row{display:flex;gap:8px}
+  input[type=text]{flex:1;background:#0f0f14;color:var(--fg);border:1px solid var(--edge);border-radius:12px;padding:12px}
+  .primary{background:var(--pink);color:#101015;border:0;border-radius:12px;padding:12px 14px;font-weight:700}
+  .tiny{font-size:12px;color:var(--mut)}
 </style>
 </head>
 <body>
+<div class="wrap">
+  <div class="top">
+    <div class="hud">
+      <span class="chip" id="moodChip">Mood: —</span>
+      <span class="chip" id="catChip">Cat: —</span>
+      <div class="meter">
+        <div class="row" style="justify-content:space-between;margin-bottom:4px">
+          <span class="tiny">Affection</span><span class="tiny" id="affVal">0</span>
+        </div>
+        <div class="bar"><div id="affFill" class="fill" style="width:50%"></div></div>
+      </div>
+      <button class="chip" id="resetBtn">Reset</button>
+    </div>
+  </div>
 
-<h1>Silken Haven</h1>
-<p>You open your eyes in a dimly lit room. A warm voice teases from the shadows.</p>
-<p><em>"Took you long enough to wake up, stranger... I’m Kate."</em></p>
+  <h1>Silken Haven</h1>
+  <div class="sub" id="subtitle">The lock clicks open. Step in and tell me your name.</div>
 
-<div id="choices">
-  <button onclick="choose(1)">"Who are you?"</button>
-  <button onclick="choose(2)">"Where am I?"</button>
-  <button onclick="choose(3)">Smile and say nothing</button>
+  <!-- Sprite (safe silhouette) -->
+  <div class="sprite" aria-hidden="true">
+    <svg viewBox="0 0 300 700" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="dress" x1="0" x2="1"><stop offset="0" stop-color="#1a1a20"/><stop offset="1" stop-color="#242430"/></linearGradient>
+        <linearGradient id="skin" x1="0" x2="1"><stop offset="0" stop-color="#c9b1a6" stop-opacity=".9"/><stop offset="1" stop-color="#d8beb0" stop-opacity=".75"/></linearGradient>
+      </defs>
+      <ellipse cx="150" cy="90" rx="22" ry="26" fill="url(#skin)" opacity=".92"/>
+      <rect x="142" y="114" width="16" height="16" rx="7" fill="url(#skin)" opacity=".86"/>
+      <path d="M115 128c22-8 48-8 70 0l16 44c8 20 10 42 8 64l-6 132-20 120h-66l-20-120-6-132c-2-22 0-44 8-64l16-44z" fill="url(#dress)"/>
+      <path d="M115 150c-8 8-18 28-22 44-2 10 8 12 14 8 6-4 14-18 18-32 2-10-2-18-10-20z" fill="url(#skin)" opacity=".85"/>
+      <path d="M185 150c8 8 18 28 22 44 2 10-8 12-14 8-6-4-14-18-18-32-2-10 2-18 10-20z" fill="url(#skin)" opacity=".85"/>
+    </svg>
+  </div>
+
+  <!-- Panels -->
+  <div class="panel" id="dialogPanel">
+    <div class="log" id="dialog">Welcome, love. Tell me your name so I can whisper it properly.</div>
+    <div class="choices" id="choices">
+      <div class="row">
+        <input id="nameInput" type="text" maxlength="24" placeholder="Your name"/>
+        <button class="primary" id="startBtn">Enter</button>
+      </div>
+      <div class="tiny">Your name and progress are saved on this device.</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="tiny">Tip: answers score −2…+2 depending on Kate’s mood. Fill the meter to unlock special scenes.</div>
+  </div>
 </div>
 
-<p id="response"></p>
-
 <script>
-function choose(option) {
-  let res = "";
-  if(option === 1) {
-    res = '"I’m whoever you need me to be tonight." She smiles knowingly.';
-  } else if(option === 2) {
-    res = '"My place... or yours, if you play your cards right."';
-  } else {
-    res = 'Her lips curl in amusement. "Mysterious. I like that."';
-  }
-  document.getElementById("response").innerHTML = res;
-  document.getElementById("choices").style.display = "none";
-}
-</script>
+(function(){
+  const STORAGE_KEY = 'sh_kate_save_v2';
+  const MOODS = ['Playful','Serious','Flirty','Guarded','Vulnerable'];
+  const CATS  = ['Dating','Advice','About You'];
+  const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
+  const save  = (o)=>{ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(o)); }catch(e){} };
+  const load  = ()=>{ try{ const s=localStorage.getItem(STORAGE_KEY); return s? JSON.parse(s):null }catch(e){ return null } };
 
+  const el = {
+    dialog: document.getElementById('dialog'),
+    choices: document.getElementById('choices'),
+    nameInput: document.getElementById('nameInput'),
+    startBtn: document.getElementById('startBtn'),
+    subtitle: document.getElementById('subtitle'),
+    affFill: document.getElementById('affFill'),
+    affVal: document.getElementById('affVal'),
+    moodChip: document.getElementById('moodChip'),
+    catChip: document.getElementById('catChip'),
+    resetBtn: document.getElementById('resetBtn'),
+  };
+
+  const state = Object.assign({
+    name: '',
+    affection: 0, // -20..+20
+    idx: 0,       // which prompt we’re on
+    mood: 'Playful',
+    cat: 'Dating',
+    started: false
+  }, load() || {});
+
+  const LIB = {
+    Dating: [
+      // [prompt, [opt,label,score], ...]
+      ["So… are you always this slow, or am I special?", 
+        ["Only for someone worth the wait.", +2],
+        ["Maybe I’m still waking up.", +1],
+        ["That’s not funny.", -1],
+        ["I didn’t want to be here.", -2]
+      ],
+      ["If we disappeared for a night, where would you take me?",
+        ["Somewhere quiet—with good tea and worse intentions.", +2],
+        ["A rooftop in the rain.", +1],
+        ["Wherever is closest.", 0],
+        ["Nowhere. I’m busy.", -2]
+      ],
+      ["What kind of kiss ruins you?",
+        ["The patient kind—earned, not taken.", +2],
+        ["Surprise me.", +1],
+        ["Does it matter?", -1],
+        ["Pass.", -2]
+      ],
+      ["Should I dress cute or dangerous?",
+        ["Dangerous on the outside; safe with me.", +2],
+        ["Whatever makes you grin.", +1],
+        ["Cute is fine.", 0],
+        ["Neither.", -2]
+      ],
+      ["Would you risk a little trouble for a better story?",
+        ["If you set the boundary, I’ll push the door.", +2],
+        ["Sometimes.", +1],
+        ["Probably not.", -1],
+        ["No.", -2]
+      ]
+    ],
+    Advice: [
+      ["I’m tense tonight. What do I actually need?",
+        ["Presence first; answers later.", +2],
+        ["A walk and silence.", +1],
+        ["Try not to think about it.", -1],
+        ["You’re overreacting.", -2]
+      ],
+      ["Talk or distract?",
+        ["Let’s name it together; if it bites, we pivot.", +2],
+        ["Your call—I’ll match you.", +1],
+        ["Distract.", 0],
+        ["Neither.", -1]
+      ],
+      ["Set a boundary for me—go.",
+        ["We move at your pace; ‘no’ ends the scene.", +2],
+        ["Check in every few minutes.", +1],
+        ["I’ll guess.", -1],
+        ["No boundaries.", -2]
+      ],
+      ["I’m second-guessing myself.",
+        ["You’re allowed doubt; we make meaning anyway.", +2],
+        ["Sleep on it.", +1],
+        ["Ignore it.", -1],
+        ["That’s your problem.", -2]
+      ],
+      ["What’s the wise move when I’m overwhelmed?",
+        ["Short list, small wins, then warmth.", +2],
+        ["Breathe and hydrate.", +1],
+        ["Scroll your phone.", 0],
+        ["Work harder.", -2]
+      ]
+    ],
+    "About You": [
+      ["What should I call you tonight?",
+        ["Call me by my name—and keep it close.", +2],
+        ["Surprise me.", +1],
+        ["Whatever.", 0],
+        ["Don’t.", -2]
+      ],
+      ["What’s a red flag for you?",
+        ["Disrespect for consent. Non-negotiable.", +2],
+        ["Dishonesty.", +1],
+        ["Bad jokes.", 0],
+        ["Feelings.", -2]
+      ],
+      ["What’s your soft spot?",
+        ["Earned trust. Quiet confessions.", +2],
+        ["Good banter.", +1],
+        ["Food.", 0],
+        ["I don’t have one.", -1]
+      ],
+      ["Why me?",
+        ["You listen between the lines.", +2],
+        ["Because you’re interesting.", +1],
+        ["Curiosity.", 0],
+        ["I’m not sure.", -1]
+      ],
+      ["What do you want from tonight?",
+        ["Connection. Heat with care.", +2],
+        ["Fun. Let’s see.", +1],
+        ["Nothing big.", 0],
+        ["Nothing.", -2]
+      ]
+    ]
+  };
+
+  function rndMood(){ return MOODS[Math.floor(Math.random()*MOODS.length)] }
+  function setHUD(){
+    el.moodChip.textContent = 'Mood: ' + state.mood;
+    el.catChip.textContent  = 'Cat: ' + state.cat;
+    const pct = (state.affection + 20) / 40 * 100; // map -20..20 → 0..100
+    el.affFill.style.width = pct + '%';
+    el.affVal.textContent = state.affection;
+  }
+
+  function start(name){
+    state.name = name || 'Stranger';
+    state.started = true;
+    state.affection = state.affection || 0;
+    state.cat = CATS[0];
+    state.mood = rndMood();
+    state.idx = 0;
+    save(state);
+    el.subtitle.textContent = `Welcome to the Haven, ${state.name}.`;
+    scene();
+  }
+
+  function scene(){
+    setHUD();
+    const pack = LIB[state.cat][state.idx];
+    if(!pack){ return finale(); }
+    // build prompt and choices
+    const [prompt, ...opts] = pack;
+    el.dialog.textContent = kateLine(prompt);
+    el.choices.innerHTML = opts.map(([label,score],i)=>(
+      `<button class="choice" data-i="${i}">${escape(label)}</button>`
+    )).join('');
+    [...el.choices.querySelectorAll('button')].forEach((b, i)=>{
+      b.addEventListener('click', ()=> handleAnswer(opts[i][1]));
+    });
+  }
+
+  // Mood scoring tweak: favor best answers when mood aligns
+  function moodTweak(base){
+    const m = state.mood;
+    // simple mapping: Playful/Flirty boost positives; Guarded/Serious penalize risky; Vulnerable boosts supportive
+    if(base >= 2){
+      if(m==='Playful'||m==='Flirty') return base+0; // already great
+      if(m==='Vulnerable'&&state.cat==='Advice') return base+0; 
+      if(m==='Guarded'&&state.cat==='Dating') return base-1;
+    }
+    if(base===1){
+      if(m==='Vulnerable'&&state.cat==='Advice') return base+1;
+      if(m==='Guarded'&&state.cat==='Dating') return base-1;
+    }
+    if(base<=-1){
+      if(m==='Playful'&&state.cat!=='Advice') return base+1; // she gives you a little grace
+    }
+    return base;
+  }
+
+  function handleAnswer(baseScore){
+    const score = clamp(moodTweak(baseScore), -2, 2);
+    state.affection = clamp(state.affection + score, -20, 20);
+    save(state);
+
+    // feedback line
+    const react = {
+      2:  "Her smile is slow—pleased. “Exactly that.”",
+      1:  "She softens. “Mm. Not bad.”",
+      0:  "She tilts her head, undecided.",
+      "-1":"Her eyes narrow, but she humors you.",
+      "-2":"The warmth dips. “Try again.”"
+    }[String(score)];
+    el.dialog.textContent = react + `  ( ${score>=0?'+':''}${score} )`;
+    setHUD();
+
+    // advance
+    setTimeout(()=>{
+      nextStep();
+    }, 900);
+  }
+
+  function nextStep(){
+    // rotate mood each step; rotate category every two steps
+    state.mood = rndMood();
+    if(state.idx % 2 === 1){
+      const ci = CATS.indexOf(state.cat);
+      state.cat = CATS[(ci+1)%CATS.length];
+    }
+    state.idx++;
+    save(state);
+    if(state.idx >= 5){ return finale(); }
+    scene();
+  }
+
+  function finale(){
+    setHUD();
+    let ending = '';
+    if(state.affection >= 14){
+      ending = `We end shoulder to shoulder, ${state.name}. The Haven learns our names and keeps them safe.`;
+    }else if(state.affection >= 6){
+      ending = `Laughter keeps finding us. “Don’t get cocky,” she murmurs—but she’s glowing.`;
+    }else if(state.affection >= -5){
+      ending = `Different tempos, same song. The door was never locked. “Another night?”`;
+    }else{
+      ending = `Cold drift. “Next time, try listening,” she says gently.`;
+    }
+    el.dialog.textContent = ending + `  (Affection ${state.affection})`;
+    el.choices.innerHTML = `
+      <button class="choice" id="again">Play again</button>
+      <button class="choice" id="keep">New run (keep name)</button>
+    `;
+    document.getElementById('again').onclick = ()=>{ hardReset() };
+    document.getElementById('keep').onclick  = ()=>{ softReset() };
+  }
+
+  function softReset(){
+    state.affection = 0; state.idx = 0; state.mood = rndMood(); state.cat = CATS[0]; save(state); scene();
+  }
+  function hardReset(){
+    localStorage.removeItem(STORAGE_KEY);
+    state.name=''; state.affection=0; state.idx=0; state.mood=rndMood(); state.cat=CATS[0]; state.started=false;
+    el.subtitle.textContent = 'The lock clicks open. Step in and tell me your name.';
+    el.dialog.textContent = 'Welcome, love. Tell me your name so I can whisper it properly.';
+    el.choices.innerHTML = `
+      <div class="row">
+        <input id="nameInput" type="text" maxlength="24" placeholder="Your name"/>
+        <button class="primary" id="startBtn">Enter</button>
+      </div>
+      <div class="tiny">Your name and progress are saved on this device.</div>`;
+    hookStarter();
+    setHUD();
+  }
+
+  function hookStarter(){
+    const ni = document.getElementById('nameInput');
+    const sb = document.getElementById('startBtn');
+    if(!ni || !sb) return;
+    ni.value = state.name || '';
+    sb.onclick = ()=> start((ni.value||'').trim());
+  }
+
+  function kateLine(text){
+    return text.replace(/\bme\b/gi, state.name ? state.name : 'you');
+  }
+  function escape(s){ return String(s).replace(/[&<>"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) }
+
+  // init
+  el.resetBtn.onclick = hardReset;
+  if(state.started && state.name){
+    el.subtitle.textContent = `Welcome back, ${state.name}.`;
+    scene();
+  }else{
+    hookStarter();
+  }
+})();
+</script>
 </body>
 </html>
