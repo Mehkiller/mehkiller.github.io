@@ -40,6 +40,16 @@
     .head{padding:10px 12px;border-bottom:1px solid var(--edge);display:flex;justify-content:space-between;align-items:center}
     .list{padding:10px 12px;overflow:auto;flex:1;font-size:14px;line-height:1.5;color:#e6e6ed}
     .entry{margin:6px 0}.who{color:var(--mut);font-size:12px}
+/* === Kate animation upgrades === */
+.sprite .sway{ transform-origin:150px 360px; animation:sway 6s ease-in-out infinite }
+@keyframes sway{ 0%,100%{ transform:rotate(0deg)} 50%{ transform:rotate(0.6deg)} }
+
+.sprite .hair{ transform-origin:150px 90px; animation:hairsway 5.8s ease-in-out infinite }
+@keyframes hairsway{ 0%,100%{ transform:rotate(0deg)} 50%{ transform:rotate(-1.2deg)} }
+
+.eyeL,.eyeR{ animation:blink 6.2s infinite; transform-origin:139px 92px }
+.eyeR{ animation-delay:.2s; transform-origin:151px 92px }
+@keyframes blink{ 0%,94%,100%{ transform:scaleY(1)} 96%{ transform:scaleY(.15)} 98%{ transform:scaleY(1)} }
   </style>
 </head>
 <body>
@@ -63,28 +73,90 @@
 
   <!-- (3) Sprite with expression layers -->
   <div class="sprite" aria-hidden="true">
-    <svg viewBox="0 0 300 700" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="dress" x1="0" x2="1"><stop offset="0" stop-color="#1a1a22"/><stop offset="1" stop-color="#262633"/></linearGradient>
-        <linearGradient id="skin" x1="0" x2="1"><stop offset="0" stop-color="#c9b1a6" stop-opacity=".92"/><stop offset="1" stop-color="#dabfb2" stop-opacity=".82"/></linearGradient>
-        <filter id="soft"><feGaussianBlur stdDeviation="0.7"/></filter>
-      </defs>
-      <path d="M108 76c14-18 60-18 74 0 6 12 2 22-4 30-18 20-52 22-72 0-6-8-10-18 2-30z" fill="#0c0c12"/>
-      <ellipse cx="145" cy="92" rx="22" ry="26" fill="url(#skin)" opacity=".95"/>
-      <rect x="137" y="114" width="16" height="16" rx="7" fill="url(#skin)" opacity=".88"/>
-      <g id="eyes_neutral" class="eyes"><circle cx="139" cy="92" r="2.2" fill="#27272f"/><circle cx="151" cy="92" r="2.2" fill="#27272f"/></g>
-      <g id="eyes_soft" class="eyes" style="opacity:.0"><path d="M136 92c4 3 8 3 12 0" stroke="#2a2a34" stroke-width="2" fill="none"/><path d="M148 92c4 3 8 3 12 0" stroke="#2a2a34" stroke-width="2" fill="none"/></g>
-      <g id="eyes_coy" class="eyes" style="opacity:.0"><path d="M136 92c4 -2 8 -2 12 0" stroke="#2a2a34" stroke-width="2" fill="none"/><path d="M148 92c4 -2 8 -2 12 0" stroke="#2a2a34" stroke-width="2" fill="none"/></g>
-      <g id="mouth_neutral" class="mouth"><path d="M140 107c3 2 7 2 10 0" stroke="#2a2a34" stroke-width="2" fill="none"/></g>
-      <g id="mouth_smile" class="mouth" style="opacity:.0"><path d="M138 107c4 4 10 4 14 0" stroke="#2a2a34" stroke-width="2" fill="none"/></g>
-      <g id="mouth_serious" class="mouth" style="opacity:.0"><line x1="138" y1="107" x2="152" y2="107" stroke="#2a2a34" stroke-width="2"/></g>
-      <path class="breath" d="M102 128c24-9 62-9 86 0l18 46c9 24 11 48 9 72l-7 122-18 130H120l-18-130-7-122c-2-24 0-48 9-72l18-46z
-                               M126 262c22 40 58 40 82 0" fill="url(#dress)"/>
-      <path d="M110 152c-10 10-20 30-24 46-2 10 8 12 14 8 8-4 16-18 20-32 2-10-2-18-10-22z" fill="url(#skin)" opacity=".86"/>
-      <path d="M180 152c10 10 20 30 24 46 2 10-8 12-14 8-8-4-16-18-20-32-2-10 2-18 10-22z" fill="url(#skin)" opacity=".86"/>
-      <ellipse cx="150" cy="290" rx="62" ry="160" fill="#ffffff14" filter="url(#soft)"/>
-    </svg>
-  </div>
+  <svg viewBox="0 0 300 700" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- deep red hair gradient -->
+      <linearGradient id="hair" x1="0" x2="1">
+        <stop offset="0" stop-color="#6d1b1b"/>
+        <stop offset="1" stop-color="#e04949"/>
+      </linearGradient>
+      <!-- cool dress gradient -->
+      <linearGradient id="dress" x1="0" x2="1">
+        <stop offset="0" stop-color="#1a1a22"/>
+        <stop offset="1" stop-color="#2b2b3a"/>
+      </linearGradient>
+      <!-- warm skin -->
+      <linearGradient id="skin" x1="0" x2="1">
+        <stop offset="0" stop-color="#c9b1a6" stop-opacity=".95"/>
+        <stop offset="1" stop-color="#e1c3b6" stop-opacity=".88"/>
+      </linearGradient>
+      <filter id="soft"><feGaussianBlur stdDeviation="0.7"/></filter>
+    </defs>
+
+    <!-- hair (back) -->
+    <path class="hair" d="M92 74c18-22 82-24 108 0 10 16 7 32-6 46-28 28-78 28-104 0-13-14-16-30 2-46z"
+          fill="url(#hair)"/>
+
+    <!-- face + neck -->
+    <ellipse cx="145" cy="92" rx="22" ry="26" fill="url(#skin)" opacity=".97"/>
+    <rect x="137" y="114" width="16" height="16" rx="7" fill="url(#skin)" opacity=".9"/>
+
+    <!-- facial features (variants controlled by JS) -->
+    <g id="eyes_neutral" class="eyes eyeL eyeR">
+      <circle cx="139" cy="92" r="2.2" fill="#262631"/>
+      <circle cx="151" cy="92" r="2.2" fill="#262631"/>
+    </g>
+    <g id="eyes_soft" class="eyes eyeL eyeR" style="opacity:0">
+      <path d="M136 92c4 3 8 3 12 0" stroke="#2a2a34" stroke-width="2" fill="none"/>
+      <path d="M148 92c4 3 8 3 12 0" stroke="#2a2a34" stroke-width="2" fill="none"/>
+    </g>
+    <g id="eyes_coy" class="eyes eyeL eyeR" style="opacity:0">
+      <path d="M136 92c4 -2 8 -2 12 0" stroke="#2a2a34" stroke-width="2" fill="none"/>
+      <path d="M148 92c4 -2 8 -2 12 0" stroke="#2a2a34" stroke-width="2" fill="none"/>
+    </g>
+
+    <g id="mouth_neutral" class="mouth"><path d="M140 107c3 2 7 2 10 0" stroke="#2a2a34" stroke-width="2" fill="none"/></g>
+    <g id="mouth_smile" class="mouth" style="opacity:0"><path d="M138 107c4 4 10 4 14 0" stroke="#2a2a34" stroke-width="2" fill="none"/></g>
+    <g id="mouth_serious" class="mouth" style="opacity:0"><line x1="138" y1="107" x2="152" y2="107" stroke="#2a2a34" stroke-width="2"/></g>
+
+    <!-- hourglass body group (sways) -->
+    <g class="sway">
+      <!-- dress with pronounced waist/hips -->
+      <path class="breath" d="
+        M98 128
+        c28-10 68-10 92 0
+        l20 48
+        c10 26 12 50 10 76
+        l-7 118 -18 134
+        H116
+        l-18 -134 -7 -118
+        c-2 -26 0 -50 10 -76
+        l20 -48
+        z
+
+        M116 230
+        c-6 22 10 44 34 56
+        c24 12 56 6 64 -14
+        c-12 -30 -40 -60 -98 -42
+        z" fill="url(#dress)"/>
+
+      <!-- arms: soft bend -->
+      <path d="M108 154c-12 12-24 34-28 50-2 10 8 12 14 8 8-4 18-20 22-34 3-10-1-18-8-24z"
+            fill="url(#skin)" opacity=".86"/>
+      <path d="M182 154c12 12 24 34 28 50 2 10-8 12-14 8-8-4-18-20-22-34-3-10 1-18 8-24z"
+            fill="url(#skin)" opacity=".86"/>
+    </g>
+
+    <!-- hair (front strands) -->
+    <path class="hair" d="M116 80c-8 8-10 18-6 26 4 10 16 14 22 10 4-2 6-8 4-14-2-8-10-16-20-22z"
+          fill="url(#hair)" opacity=".9"/>
+    <path class="hair" d="M172 80c10 6 18 16 20 24 2 6 0 12-4 14-6 4-18 0-22-10-4-8-2-18 6-28z"
+          fill="url(#hair)" opacity=".9"/>
+
+    <!-- gentle body highlight -->
+    <ellipse cx="150" cy="300" rx="64" ry="170" fill="#ffffff12" filter="url(#soft)"/>
+  </svg>
+</div>
 
   <!-- (4) Intro / Dialogue panel -->
   <div class="panel" id="dialogPanel">
