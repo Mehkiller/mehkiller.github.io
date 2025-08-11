@@ -1,66 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Silken Haven — Kate</title>
-<meta name="theme-color" content="#0b0b0f"/>
-<style>
-  :root{
-    --bg:#0b0b0f; --fg:#f5f5f7; --mut:#b0b0bb;
-    --panel:#121218; --edge:#232330; --pink:#ff5ca8;
-  }
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{margin:0;background:var(--bg);color:var(--fg);
-       font-family:ui-sans-serif,system-ui,Segoe UI,Inter,Roboto,Helvetica,Arial}
-  .wrap{max-width:760px;margin:0 auto;padding:16px 16px 120px}
-
-  .top{position:sticky;top:0;background:linear-gradient(180deg,rgba(11,11,15,.88),rgba(11,11,15,0));padding:6px 0 2px;backdrop-filter:blur(6px);z-index:5}
-  .hud{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-  .chip{padding:6px 10px;border:1px solid var(--edge);border-radius:999px;background:#14141a;color:var(--mut);font-size:12px}
-  .meter{flex:1;min-width:180px}
-  .tiny{font-size:12px;color:var(--mut)}
-  .bar{height:8px;border:1px solid #242432;background:#15151c;border-radius:999px;overflow:hidden}
-  .fill{height:100%;background:var(--pink);width:50%}
-
-  h1{font-size:38px;margin:8px 0 4px}
-  .sub{color:var(--mut)}
-
-  .panel{background:rgba(18,18,24,.7);border:1px solid var(--edge);
-         border-radius:16px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);margin-top:12px}
-  .log{font-size:15px;line-height:1.55;color:#e6e6ed;white-space:pre-wrap}
-  .choices{display:grid;gap:10px;margin-top:8px}
-  button.choice{width:100%;text-align:left;border:1px solid var(--edge);background:#0f0f15;color:var(--fg);padding:12px 14px;border-radius:12px;font-size:16px}
-  button.choice:active{transform:scale(.99)}
-  .row{display:flex;gap:8px}
-  input[type=text]{flex:1;background:#0f0f14;color:var(--fg);border:1px solid var(--edge);border-radius:12px;padding:12px}
-  .primary{background:var(--pink);color:#101015;border:0;border-radius:12px;padding:12px 14px;font-weight:700}
-
-  /* Sprite */
-  .sprite{display:flex;justify-content:center;margin-top:8px;filter:drop-shadow(0 12px 28px rgba(0,0,0,.7))}
-  .sprite svg{width:min(68vw,380px);height:auto;opacity:.96}
-  .sprite .breath{ transform-origin:150px 350px; animation: breathe 4.5s ease-in-out infinite }
-  @keyframes breathe{ 0%,100%{ transform:translateY(0)} 50%{ transform:translateY(2px)} }
-  .eyes,.mouth{opacity:.85;transition:opacity .25s ease}
-
-  /* Log drawer */
-  .drawer{position:fixed;inset:0;display:none;background:rgba(8,8,12,.6);backdrop-filter:blur(4px);z-index:20}
-  .drawer .inner{position:absolute;inset:10px;border:1px solid var(--edge);border-radius:14px;background:#0d0d14;display:flex;flex-direction:column}
-  .head{padding:10px 12px;border-bottom:1px solid var(--edge);display:flex;justify-content:space-between;align-items:center}
-  .list{padding:10px 12px;overflow:auto;flex:1;font-size:14px;line-height:1.5;color:#e6e6ed}
-  .entry{margin:6px 0}.who{color:var(--mut);font-size:12px}
-</style>
+  <!-- (1) Head & Styles -->
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Silken Haven — Kate</title>
+  <meta name="theme-color" content="#0b0b0f"/>
+  <style>
+    :root{--bg:#0b0b0f;--fg:#f5f5f7;--mut:#b0b0bb;--panel:#121218;--edge:#232330;--pink:#ff5ca8}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    body{margin:0;background:var(--bg);color:var(--fg);font-family:ui-sans-serif,system-ui,Segoe UI,Inter,Roboto,Helvetica,Arial}
+    .wrap{max-width:760px;margin:0 auto;padding:16px 16px 120px}
+    .top{position:sticky;top:0;background:linear-gradient(180deg,rgba(11,11,15,.88),rgba(11,11,15,0));padding:6px 0 2px;backdrop-filter:blur(6px);z-index:5}
+    .hud{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .chip{padding:6px 10px;border:1px solid var(--edge);border-radius:999px;background:#14141a;color:var(--mut);font-size:12px}
+    .meter{flex:1;min-width:180px}
+    .tiny{font-size:12px;color:var(--mut)}
+    .bar{height:8px;border:1px solid #242432;background:#15151c;border-radius:999px;overflow:hidden}
+    .fill{height:100%;background:var(--pink);width:50%}
+    h1{font-size:38px;margin:8px 0 4px}
+    .sub{color:var(--mut)}
+    .panel{background:rgba(18,18,24,.7);border:1px solid var(--edge);border-radius:16px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);margin-top:12px}
+    .log{font-size:15px;line-height:1.55;color:#e6e6ed;white-space:pre-wrap}
+    .choices{display:grid;gap:10px;margin-top:8px}
+    button.choice{width:100%;text-align:left;border:1px solid var(--edge);background:#0f0f15;color:var(--fg);padding:12px 14px;border-radius:12px;font-size:16px}
+    button.choice:active{transform:scale(.99)}
+    .row{display:flex;gap:8px}
+    input[type=text]{flex:1;background:#0f0f14;color:var(--fg);border:1px solid var(--edge);border-radius:12px;padding:12px}
+    .primary{background:var(--pink);color:#101015;border:0;border-radius:12px;padding:12px 14px;font-weight:700}
+    /* Sprite */
+    .sprite{display:flex;justify-content:center;margin-top:8px;filter:drop-shadow(0 12px 28px rgba(0,0,0,.7))}
+    .sprite svg{width:min(68vw,380px);height:auto;opacity:.96}
+    .sprite .breath{transform-origin:150px 350px;animation:breathe 4.5s ease-in-out infinite}
+    @keyframes breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(2px)}}
+    .eyes,.mouth{opacity:.85;transition:opacity .25s ease}
+    /* Log drawer */
+    .drawer{position:fixed;inset:0;display:none;background:rgba(8,8,12,.6);backdrop-filter:blur(4px);z-index:20}
+    .drawer .inner{position:absolute;inset:10px;border:1px solid var(--edge);border-radius:14px;background:#0d0d14;display:flex;flex-direction:column}
+    .head{padding:10px 12px;border-bottom:1px solid var(--edge);display:flex;justify-content:space-between;align-items:center}
+    .list{padding:10px 12px;overflow:auto;flex:1;font-size:14px;line-height:1.5;color:#e6e6ed}
+    .entry{margin:6px 0}.who{color:var(--mut);font-size:12px}
+  </style>
 </head>
 <body>
 <div class="wrap">
+  <!-- (2) HUD -->
   <div class="top">
     <div class="hud">
       <span class="chip" id="moodChip">Mood: —</span>
       <span class="chip" id="catChip">Cat: —</span>
       <div class="meter">
-        <div class="row" style="justify-content:space-between;margin-bottom:4px">
-          <span class="tiny">Affection</span><span class="tiny" id="affVal">0</span>
-        </div>
+        <div class="row" style="justify-content:space-between;margin-bottom:4px"><span class="tiny">Affection</span><span class="tiny" id="affVal">0</span></div>
         <div class="bar"><div id="affFill" class="fill" style="width:50%"></div></div>
       </div>
       <button class="chip" id="logBtn">Log</button>
@@ -71,44 +61,32 @@
   <h1>Silken Haven</h1>
   <div class="sub" id="subtitle">The lock clicks open. Step in and tell me your name.</div>
 
-  <!-- Sprite with simple expression layers -->
+  <!-- (3) Sprite with expression layers -->
   <div class="sprite" aria-hidden="true">
     <svg viewBox="0 0 300 700" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="dress" x1="0" x2="1">
-          <stop offset="0" stop-color="#1a1a22"/>
-          <stop offset="1" stop-color="#262633"/>
-        </linearGradient>
-        <linearGradient id="skin" x1="0" x2="1">
-          <stop offset="0" stop-color="#c9b1a6" stop-opacity=".92"/>
-          <stop offset="1" stop-color="#dabfb2" stop-opacity=".82"/>
-        </linearGradient>
+        <linearGradient id="dress" x1="0" x2="1"><stop offset="0" stop-color="#1a1a22"/><stop offset="1" stop-color="#262633"/></linearGradient>
+        <linearGradient id="skin" x1="0" x2="1"><stop offset="0" stop-color="#c9b1a6" stop-opacity=".92"/><stop offset="1" stop-color="#dabfb2" stop-opacity=".82"/></linearGradient>
         <filter id="soft"><feGaussianBlur stdDeviation="0.7"/></filter>
       </defs>
-      <!-- hair back -->
       <path d="M108 76c14-18 60-18 74 0 6 12 2 22-4 30-18 20-52 22-72 0-6-8-10-18 2-30z" fill="#0c0c12"/>
-      <!-- face/neck -->
       <ellipse cx="145" cy="92" rx="22" ry="26" fill="url(#skin)" opacity=".95"/>
       <rect x="137" y="114" width="16" height="16" rx="7" fill="url(#skin)" opacity=".88"/>
-      <!-- eyes / mouth (variants toggled by JS) -->
       <g id="eyes_neutral" class="eyes"><circle cx="139" cy="92" r="2.2" fill="#27272f"/><circle cx="151" cy="92" r="2.2" fill="#27272f"/></g>
       <g id="eyes_soft" class="eyes" style="opacity:.0"><path d="M136 92c4 3 8 3 12 0" stroke="#2a2a34" stroke-width="2" fill="none"/><path d="M148 92c4 3 8 3 12 0" stroke="#2a2a34" stroke-width="2" fill="none"/></g>
       <g id="eyes_coy" class="eyes" style="opacity:.0"><path d="M136 92c4 -2 8 -2 12 0" stroke="#2a2a34" stroke-width="2" fill="none"/><path d="M148 92c4 -2 8 -2 12 0" stroke="#2a2a34" stroke-width="2" fill="none"/></g>
       <g id="mouth_neutral" class="mouth"><path d="M140 107c3 2 7 2 10 0" stroke="#2a2a34" stroke-width="2" fill="none"/></g>
       <g id="mouth_smile" class="mouth" style="opacity:.0"><path d="M138 107c4 4 10 4 14 0" stroke="#2a2a34" stroke-width="2" fill="none"/></g>
       <g id="mouth_serious" class="mouth" style="opacity:.0"><line x1="138" y1="107" x2="152" y2="107" stroke="#2a2a34" stroke-width="2"/></g>
-      <!-- torso/hips -->
       <path class="breath" d="M102 128c24-9 62-9 86 0l18 46c9 24 11 48 9 72l-7 122-18 130H120l-18-130-7-122c-2-24 0-48 9-72l18-46z
                                M126 262c22 40 58 40 82 0" fill="url(#dress)"/>
-      <!-- arms -->
       <path d="M110 152c-10 10-20 30-24 46-2 10 8 12 14 8 8-4 16-18 20-32 2-10-2-18-10-22z" fill="url(#skin)" opacity=".86"/>
       <path d="M180 152c10 10 20 30 24 46 2 10-8 12-14 8-8-4-16-18-20-32-2-10 2-18 10-22z" fill="url(#skin)" opacity=".86"/>
-      <!-- highlight -->
       <ellipse cx="150" cy="290" rx="62" ry="160" fill="#ffffff14" filter="url(#soft)"/>
     </svg>
   </div>
 
-  <!-- Dialogue panel -->
+  <!-- (4) Intro / Dialogue panel -->
   <div class="panel" id="dialogPanel">
     <div class="log" id="dialog">Welcome, love. Tell me your name so I can whisper it properly.</div>
     <div class="choices" id="choices">
@@ -120,12 +98,10 @@
     </div>
   </div>
 
-  <div class="panel">
-    <div class="tiny">Tip: answers score −2…+2 depending on Kate’s mood. Fill the meter to unlock special scenes. Open the Log to reread your convo.</div>
-  </div>
+  <div class="panel"><div class="tiny">Tip: answers score −2…+2 depending on Kate’s mood. Fill the meter to unlock special scenes. Open the Log to reread your convo.</div></div>
 </div>
 
-<!-- Log drawer -->
+<!-- (5) Log Drawer -->
 <div class="drawer" id="drawer">
   <div class="inner">
     <div class="head">
@@ -141,316 +117,210 @@
 
 <script>
 (function(){
-  const STORAGE_KEY = 'sh_kate_save_v4';
-  const MOODS = ['Playful','Serious','Flirty','Guarded','Vulnerable'];
-  const CATS  = ['Dating','Advice','About You'];
-  const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
-  const save  = (o)=>{ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(o)); }catch(e){} };
-  const load  = ()=>{ try{ const s=localStorage.getItem(STORAGE_KEY); return s? JSON.parse(s):null }catch(e){ return null } };
+  // ---------- (6) Library + helpers ----------
+  const STORAGE_KEY='sh_kate_save_v5';
+  const MOODS=['Playful','Serious','Flirty','Guarded','Vulnerable'];
+  const CATS=['Dating','Advice','About You'];
+  const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
+  const save=o=>{try{localStorage.setItem(STORAGE_KEY,JSON.stringify(o));}catch(e){}};
+  const load=()=>{try{const s=localStorage.getItem(STORAGE_KEY);return s?JSON.parse(s):null}catch(e){return null}};
 
-  const el = {
-    dialog: document.getElementById('dialog'),
-    choices: document.getElementById('choices'),
-    nameInput: document.getElementById('nameInput'),
-    startBtn: document.getElementById('startBtn'),
-    subtitle: document.getElementById('subtitle'),
-    affFill: document.getElementById('affFill'),
-    affVal: document.getElementById('affVal'),
-    moodChip: document.getElementById('moodChip'),
-    catChip: document.getElementById('catChip'),
-    resetBtn: document.getElementById('resetBtn'),
-    logBtn: document.getElementById('logBtn'),
-    drawer: document.getElementById('drawer'),
-    logList: document.getElementById('logList'),
-    closeBtn: document.getElementById('closeBtn'),
-    exportBtn: document.getElementById('exportBtn'),
+  const el={
+    dialog:document.getElementById('dialog'),
+    choices:document.getElementById('choices'),
+    nameInput:document.getElementById('nameInput'),
+    startBtn:document.getElementById('startBtn'),
+    subtitle:document.getElementById('subtitle'),
+    affFill:document.getElementById('affFill'),
+    affVal:document.getElementById('affVal'),
+    moodChip:document.getElementById('moodChip'),
+    catChip:document.getElementById('catChip'),
+    logBtn:document.getElementById('logBtn'),
+    resetBtn:document.getElementById('resetBtn'),
+    drawer:document.getElementById('drawer'),
+    logList:document.getElementById('logList'),
+    closeBtn:document.getElementById('closeBtn'),
+    exportBtn:document.getElementById('exportBtn'),
   };
 
-  const state = Object.assign({
-    name: '',
-    affection: 0,
-    idx: 0,
-    mood: 'Playful',
-    cat: 'Dating',
-    started: false,
-    log: []
-  }, load() || {});
+  const state=Object.assign({
+    name:'',affection:0,idx:0,mood:'Playful',cat:'Dating',started:false,log:[]
+  },load()||{});
 
-  function line(s){ return String(s).replaceAll('{name}', state.name || 'you'); }
+  function line(s){return String(s).replaceAll('{name}',state.name||'you');}
+  const D=(t,a,b,c,d)=>[t,[a[0],a[1]],[b[0],b[1]],[c[0],c[1]],[d[0],d[1]]];
 
-  // 12 prompts per category (expandable)
-  const D = (t,a,b,c,d)=>[t,[a[0],a[1]],[b[0],b[1]],[c[0],c[1]],[d[0],d[1]]];
-  const LIB = {
-    Dating: [
+  const LIB={ // 12 prompts per category; add more easily
+    Dating:[
       D("So… are you always this slow, or do I make you shy, {name}?",
-        ["Only for someone worth the wait.", +2], ["I’m still waking up.", +1], ["That’s not funny.", -1], ["I didn’t want to be here.", -2]),
+        ["Only for someone worth the wait.",+2],["I’m still waking up.",+1],["That’s not funny.",-1],["I didn’t want to be here.",-2]),
       D("If we disappeared for a night, where are you taking me?",
-        ["Somewhere quiet—good tea, worse intentions.", +2], ["A rooftop in the rain.", +1], ["Wherever’s closest.", 0], ["Nowhere. I’m busy.", -2]),
+        ["Somewhere quiet—good tea, worse intentions.",+2],["A rooftop in the rain.",+1],["Wherever’s closest.",0],["Nowhere. I’m busy.",-2]),
       D("What kind of kiss ruins you, {name}?",
-        ["The patient kind—earned, not taken.", +2], ["Surprise me.", +1], ["Does it matter?", -1], ["Pass.", -2]),
+        ["The patient kind—earned, not taken.",+2],["Surprise me.",+1],["Does it matter?",-1],["Pass.",-2]),
       D("Should I dress cute or dangerous for you?",
-        ["Dangerous outside; safe with me.", +2], ["Whatever makes you grin.", +1], ["Cute is fine.", 0], ["Neither.", -2]),
+        ["Dangerous outside; safe with me.",+2],["Whatever makes you grin.",+1],["Cute is fine.",0],["Neither.",-2]),
       D("Would you risk a little trouble if I asked nicely?",
-        ["If you set the line, I’ll push the door.", +2], ["Sometimes.", +1], ["Probably not.", -1], ["No.", -2]),
+        ["If you set the line, I’ll push the door.",+2],["Sometimes.",+1],["Probably not.",-1],["No.",-2]),
       D("Pick a soundtrack for us right now.",
-        ["Low jazz and rain.", +2], ["Lo-fi and candlelight.", +1], ["Silence.", 0], ["Anything loud.", -1]),
+        ["Low jazz and rain.",+2],["Lo-fi and candlelight.",+1],["Silence.",0],["Anything loud.",-1]),
       D("How would you touch first?",
-        ["Hands visible; ask, then graze.", +2], ["A careful hug.", +1], ["Go for it.", -1], ["I wouldn’t.", -2]),
+        ["Hands visible; ask, then graze.",+2],["A careful hug.",+1],["Go for it.",-1],["I wouldn’t.",-2]),
       D("If I tease you, do you tease back?",
-        ["Only if you love it.", +2], ["Probably.", +1], ["Maybe later.", 0], ["No.", -1]),
+        ["Only if you love it.",+2],["Probably.",+1],["Maybe later.",0],["No.",-1]),
       D("Best place in this room?",
-        ["Beside you on the floor.", +2], ["By the window.", +1], ["Anywhere.", 0], ["The exit.", -2]),
+        ["Beside you on the floor.",+2],["By the window.",+1],["Anywhere.",0],["The exit.",-2]),
       D("What do you notice about me first?",
-        ["Your presence—the way you hold space.", +2], ["Your smile.", +1], ["Your outfit.", 0], ["Nothing special.", -2]),
+        ["Your presence—the way you hold space.",+2],["Your smile.",+1],["Your outfit.",0],["Nothing special.",-2]),
       D("If I say 'slow', you…",
-        ["Match it and check in.", +2], ["Ease up a little.", +1], ["Ignore it.", -2], ["Laugh it off.", -2]),
+        ["Match it and check in.",+2],["Ease up a little.",+1],["Ignore it.",-2],["Laugh it off.",-2]),
       D("What’s your flirting style, {name}?",
-        ["Precision and respect.", +2], ["Playful banter.", +1], ["Chaos.", -1], ["I don’t flirt.", -2]),
+        ["Precision and respect.",+2],["Playful banter.",+1],["Chaos.",-1],["I don’t flirt.",-2]),
     ],
-    Advice: [
+    Advice:[
       D("I’m tense tonight. What do I actually need from you?",
-        ["Presence first; answers later.", +2], ["A walk and quiet.", +1], ["Try not to think about it.", -1], ["You’re overreacting.", -2]),
+        ["Presence first; answers later.",+2],["A walk and quiet.",+1],["Try not to think about it.",-1],["You’re overreacting.",-2]),
       D("Talk or distract me?",
-        ["Let’s name it together. If it bites, we pivot.", +2], ["Your call—I’ll match you.", +1], ["Distract.", 0], ["Neither.", -1]),
+        ["Let’s name it together. If it bites, we pivot.",+2],["Your call—I’ll match you.",+1],["Distract.",0],["Neither.",-1]),
       D("Set a boundary for us—go.",
-        ["We move at your pace; ‘no’ ends the scene.", +2], ["Check in every few minutes.", +1], ["I’ll guess.", -1], ["No boundaries.", -2]),
+        ["We move at your pace; ‘no’ ends the scene.",+2],["Check in every few minutes.",+1],["I’ll guess.",-1],["No boundaries.",-2]),
       D("I’m second-guessing myself.",
-        ["You’re allowed doubt; we’ll make meaning anyway.", +2], ["Sleep on it.", +1], ["Ignore it.", -1], ["That’s your problem.", -2]),
+        ["You’re allowed doubt; we’ll make meaning anyway.",+2],["Sleep on it.",+1],["Ignore it.",-1],["That’s your problem.",-2]),
       D("When I’m overwhelmed, what’s your wise move?",
-        ["Short list, small wins, then warmth.", +2], ["Breathe and hydrate.", +1], ["Scroll your phone.", 0], ["Work harder.", -2]),
+        ["Short list, small wins, then warmth.",+2],["Breathe and hydrate.",+1],["Scroll your phone.",0],["Work harder.",-2]),
       D("My focus is wrecked. Help.",
-        ["Two-minute reset: breathe, sip water, choose one task.", +2], ["Timer sprint.", +1], ["Push through.", -1], ["Forget it.", 0]),
+        ["Two-minute reset: breathe, sip water, choose one task.",+2],["Timer sprint.",+1],["Push through.",-1],["Forget it.",0]),
       D("I’m worried I’ll disappoint you.",
-        ["You don’t owe performance—just honesty.", +2], ["Let’s go slow.", +1], ["It’ll be fine.", 0], ["Don’t worry about me.", -1]),
+        ["You don’t owe performance—just honesty.",+2],["Let’s go slow.",+1],["It’ll be fine.",0],["Don’t worry about me.",-1]),
       D("I need reassurance.",
-        ["I’m here; your ‘no’ is safe with me.", +2], ["You’re doing okay.", +1], ["You’ll get over it.", -1], ["Why?", -2]),
+        ["I’m here; your ‘no’ is safe with me.",+2],["You’re doing okay.",+1],["You’ll get over it.",-1],["Why?",-2]),
       D("Small panic—ground me.",
-        ["Name 3 things you feel; breathe with me.", +2], ["Hold my hand?", +1], ["Ignore it.", -1], ["Toughen up.", -2]),
+        ["Name 3 feelings; breathe with me.",+2],["Hold my hand?",+1],["Ignore it.",-1],["Toughen up.",-2]),
       D("Bad day. What now?",
-        ["Gentle routine, then cozy.", +2], ["Snack + nap.", +1], ["Work more.", -1], ["Nothing.", 0]),
+        ["Gentle routine, then cozy.",+2],["Snack + nap.",+1],["Work more.",-1],["Nothing.",0]),
       D("I want feedback later. How should we do it?",
-        ["Aftercare talk: what worked, what didn’t.", +2], ["Quick check-in tomorrow.", +1], ["Skip it.", -1], ["Don’t ask me.", -2]),
+        ["Aftercare talk: what worked, what didn’t.",+2],["Quick check-in tomorrow.",+1],["Skip it.",-1],["Don’t ask me.",-2]),
       D("My social battery is low.",
-        ["We leave early—no guilt.", +2], ["Quiet corner.", +1], ["Power through.", -1], ["Stay anyway.", -2]),
+        ["We leave early—no guilt.",+2],["Quiet corner.",+1],["Power through.",-1],["Stay anyway.",-2]),
     ],
-    "About You": [
+    "About You":[
       D("What should I call you tonight?",
-        ["Your name—say it like a secret.", +2], ["Surprise me.", +1], ["Whatever.", 0], ["Don’t.", -2]),
+        ["Your name—say it like a secret.",+2],["Surprise me.",+1],["Whatever.",0],["Don’t.",-2]),
       D("Big red flag for you?",
-        ["Disrespect for consent. Non-negotiable.", +2], ["Dishonesty.", +1], ["Bad jokes.", 0], ["Feelings.", -2]),
+        ["Disrespect for consent. Non-negotiable.",+2],["Dishonesty.",+1],["Bad jokes.",0],["Feelings.",-2]),
       D("What’s your soft spot, {name}?",
-        ["Earned trust. Quiet confessions.", +2], ["Good banter.", +1], ["Food.", 0], ["I don’t have one.", -1]),
+        ["Earned trust. Quiet confessions.",+2],["Good banter.",+1],["Food.",0],["I don’t have one.",-1]),
       D("Why me?",
-        ["You listen between the lines.", +2], ["Because you’re interesting.", +1], ["Curiosity.", 0], ["I’m not sure.", -1]),
+        ["You listen between the lines.",+2],["Because you’re interesting.",+1],["Curiosity.",0],["I’m not sure.",-1]),
       D("What do you actually want from tonight?",
-        ["Connection—heat with care.", +2], ["Fun. Let’s see.", +1], ["Nothing big.", 0], ["Nothing.", -2]),
+        ["Connection—heat with care.",+2],["Fun. Let’s see.",+1],["Nothing big.",0],["Nothing.",-2]),
       D("Your comfort ritual?",
-        ["Dim lights, slow tea, slower breath.", +2], ["Music + blanket.", +1], ["Games.", 0], ["None.", -1]),
+        ["Dim lights, slow tea, slower breath.",+2],["Music + blanket.",+1],["Games.",0],["None.",-1]),
       D("Your love language—tonight?",
-        ["Quality time + check-ins.", +2], ["Words and warmth.", +1], ["Gifts.", 0], ["Skip it.", -1]),
+        ["Quality time + check-ins.",+2],["Words and warmth.",+1],["Gifts.",0],["Skip it.",-1]),
       D("What makes you feel safe with me?",
-        ["When you ask and mean it.", +2], ["Consistency.", +1], ["Luck.", 0], ["I don’t.", -2]),
+        ["When you ask and mean it.",+2],["Consistency.",+1],["Luck.",0],["I don’t.",-2]),
       D("How do you say no?",
-        ["Plain words; I trust you to honor them.", +2], ["Signals + space.", +1], ["I avoid it.", -1], ["I don’t.", -2]),
+        ["Plain words; I trust you to honor them.",+2],["Signals + space.",+1],["I avoid it.",-1],["I don’t.",-2]),
       D("What secretly turns your head?",
-        ["Confident softness.", +2], ["Sharp wit.", +1], ["Looks.", 0], ["Nothing.", -1]),
+        ["Confident softness.",+2],["Sharp wit.",+1],["Looks.",0],["Nothing.",-1]),
       D("Your perfect slow morning?",
-        ["Windows open, your voice, no rush.", +2], ["Coffee walk.", +1], ["Sleep.", 0], ["Work.", -1]),
+        ["Windows open, your voice, no rush.",+2],["Coffee walk.",+1],["Sleep.",0],["Work.",-1]),
       D("What do you need from me to keep going?",
-        ["Curiosity and care.", +2], ["Honesty.", +1], ["Luck.", 0], ["Nothing.", -2]),
+        ["Curiosity and care.",+2],["Honesty.",+1],["Luck.",0],["Nothing.",-2]),
     ]
   };
 
-  // sprite expression control
-  const eyes = {
-    neutral: document.getElementById('eyes_neutral'),
-    soft:    document.getElementById('eyes_soft'),
-    coy:     document.getElementById('eyes_coy')
-  };
-  const mouth = {
-    neutral: document.getElementById('mouth_neutral'),
-    smile:   document.getElementById('mouth_smile'),
-    serious: document.getElementById('mouth_serious')
-  };
-  function setExpr(key){
-    const map = {
-      Playful:['soft','smile'],
-      Flirty: ['coy','smile'],
-      Serious:['neutral','serious'],
-      Guarded:['coy','serious'],
-      Vulnerable:['soft','neutral']
-    }[state.mood] || ['neutral','neutral'];
-    for(const k in eyes) eyes[k].style.opacity = (k===map[0])?1:0;
-    for(const k in mouth) mouth[k].style.opacity = (k===map[1])?1:0;
+  // ---------- (7) Engine ----------
+  const eyes={neutral:document.getElementById('eyes_neutral'),soft:document.getElementById('eyes_soft'),coy:document.getElementById('eyes_coy')};
+  const mouth={neutral:document.getElementById('mouth_neutral'),smile:document.getElementById('mouth_smile'),serious:document.getElementById('mouth_serious')};
+  function setExpr(){
+    const m=state.mood;
+    const map={Playful:['soft','smile'],Flirty:['coy','smile'],Serious:['neutral','serious'],Guarded:['coy','serious'],Vulnerable:['soft','neutral']}[m]||['neutral','neutral'];
+    for(const k in eyes) eyes[k].style.opacity=(k===map[0])?1:0;
+    for(const k in mouth) mouth[k].style.opacity=(k===map[1])?1:0;
   }
-
   function setHUD(){
-    document.getElementById('moodChip').textContent = 'Mood: ' + state.mood;
-    document.getElementById('catChip').textContent  = 'Cat: ' + state.cat;
-    const pct = (state.affection + 20) / 40 * 100;
-    el.affFill.style.width = pct + '%';
-    el.affVal.textContent = state.affection;
-    setExpr(state.mood);
+    document.getElementById('moodChip').textContent='Mood: '+state.mood;
+    document.getElementById('catChip').textContent='Cat: '+state.cat;
+    const pct=(state.affection+20)/40*100; el.affFill.style.width=pct+'%'; el.affVal.textContent=state.affection; setExpr();
   }
-
-  function rndMood(){ return MOODS[Math.floor(Math.random()*MOODS.length)] }
-
-  function addLog(who, text){
-    state.log.push({who,text,t:Date.now()});
-    if(state.log.length>300) state.log.shift();
-    save(state);
-  }
-  function renderLog(){
-    el.logList.innerHTML = state.log.map(x =>
-      `<div class="entry"><div class="who">${x.who} • ${new Date(x.t).toLocaleTimeString()}</div><div>${escapeHtml(x.text)}</div></div>`
-    ).join('');
-  }
-
-  function say(who, text){
-    el.dialog.textContent = text;
-    addLog(who, text);
-  }
+  function rndMood(){return MOODS[Math.floor(Math.random()*MOODS.length)]}
+  function addLog(who,text){state.log.push({who,text,t:Date.now()});if(state.log.length>300)state.log.shift();save(state);}
+  function renderLog(){el.logList.innerHTML=state.log.map(x=>`<div class="entry"><div class="who">${x.who} • ${new Date(x.t).toLocaleTimeString()}</div><div>${escapeHtml(x.text)}</div></div>`).join('');}
+  function say(who,text){el.dialog.textContent=text;addLog(who,text);}
 
   function start(name){
-    state.name = name || 'you';
-    state.started = true;
-    state.affection = 0;
-    state.cat = CATS[0];
-    state.mood = rndMood();
-    state.idx = 0;
-    save(state);
-    el.subtitle.textContent = `Welcome to the Haven, ${state.name}.`;
-    scene();
+    state.name=name||'you'; state.started=true; state.affection=0; state.cat=CATS[0]; state.mood=rndMood(); state.idx=0; save(state);
+    el.subtitle.textContent=`Welcome to the Haven, ${state.name}.`; scene();
   }
 
   function scene(){
     setHUD();
-    const pack = LIB[state.cat][state.idx];
-    if(!pack){ return finale(); }
-    const [prompt, ...opts] = pack;
-    say('Kate', line(prompt));
-    el.choices.innerHTML = opts.map(([label,score],i)=>(
-      `<button class="choice" data-i="${i}">${escapeHtml(label)}</button>`
-    ).join(''));
-    [...el.choices.querySelectorAll('button')].forEach((b, i)=>{
-      b.addEventListener('click', ()=> handleAnswer(opts[i][1], opts[i][0]));
-    });
+    const pack=LIB[state.cat][state.idx]; if(!pack){return finale();}
+    const [prompt,...opts]=pack;
+    say('Kate',line(prompt));
+    el.choices.innerHTML=opts.map(([label,score])=>`<button class="choice">${escapeHtml(label)}</button>`).join('');
+    [...el.choices.querySelectorAll('button')].forEach((b,i)=>b.addEventListener('click',()=>handleAnswer(opts[i][1],opts[i][0])));
   }
 
-  // Mood tweak: playful/flirty soften negatives; guarded penalizes risky dating moves; vulnerable boosts supportive advice
   function moodTweak(base){
-    const m = state.mood;
-    if(base >= 2){
-      if(m==='Guarded' && state.cat==='Dating') return base-1;
-      return base;
-    }
-    if(base === 1){
-      if(m==='Vulnerable' && state.cat==='Advice') return base+1;
-      if(m==='Guarded'   && state.cat==='Dating') return base-1;
-      return base;
-    }
-    if(base <= -1){
-      if(m==='Playful' || m==='Flirty') return base+1;
-      return base;
-    }
+    const m=state.mood;
+    if(base>=2){ if(m==='Guarded'&&state.cat==='Dating')return base-1; return base; }
+    if(base===1){ if(m==='Vulnerable'&&state.cat==='Advice')return base+1; if(m==='Guarded'&&state.cat==='Dating')return base-1; return base; }
+    if(base<=-1){ if(m==='Playful'||m==='Flirty')return base+1; return base; }
     return base;
   }
 
-  function handleAnswer(baseScore, label){
-    addLog('You', label);
-    const score = clamp(moodTweak(baseScore), -2, 2);
-    state.affection = clamp(state.affection + score, -20, 20);
-    save(state);
-
-    const react = {
-      2:  "Her smile is slow—pleased. “Exactly that.”",
-      1:  "She softens. “Mm. Not bad.”",
-      0:  "She tilts her head, undecided.",
-      "-1":"Her eyes narrow, but she humors you.",
-      "-2":"The warmth dips. “Try again.”"
-    }[String(score)];
-    say('Kate', react + `  ( ${score>=0?'+':''}${score} )`);
-    setHUD();
-
-    setTimeout(nextStep, 900);
+  function handleAnswer(baseScore,label){
+    addLog('You',label);
+    const score=clamp(moodTweak(baseScore),-2,2);
+    state.affection=clamp(state.affection+score,-20,20); save(state);
+    const react={2:"Her smile is slow—pleased. “Exactly that.”",1:"She softens. “Mm. Not bad.”",0:"She tilts her head, undecided.",'-1':"Her eyes narrow, but she humors you.",'-2':"The warmth dips. “Try again.”"}[String(score)];
+    say('Kate',react+`  ( ${score>=0?'+':''}${score} )`); setHUD();
+    setTimeout(nextStep,900);
   }
 
   function nextStep(){
-    state.mood = rndMood();
-    if(state.idx % 2 === 1){
-      const ci = CATS.indexOf(state.cat);
-      state.cat = CATS[(ci+1)%CATS.length];
-    }
-    state.idx++;
-    save(state);
-    if(state.idx >= 12){ return finale(); }
+    state.mood=rndMood();
+    if(state.idx%2===1){const ci=CATS.indexOf(state.cat); state.cat=CATS[(ci+1)%CATS.length];}
+    state.idx++; save(state);
+    if(state.idx>=12){return finale();}
     scene();
   }
 
   function finale(){
     setHUD();
-    let ending = '';
-    if(state.affection >= 14){
-      ending = `We end shoulder to shoulder, {name}. The Haven learns our names and keeps them safe.`;
-    }else if(state.affection >= 6){
-      ending = `Laughter keeps finding us. “Don’t get cocky,” I murmur—but I’m glowing.`;
-    }else if(state.affection >= -5){
-      ending = `Different tempos, same song. The door was never locked. “Another night, {name}?”`;
-    }else{
-      ending = `A little chilly. “Next time, try listening,” I say gently.`;
-    }
-    say('Narrator', line(ending) + `  (Affection ${state.affection})`);
-    el.choices.innerHTML = `
-      <button class="choice" id="again">Play again</button>
-      <button class="choice" id="keep">New run (keep name)</button>
-    `;
-    document.getElementById('again').onclick = hardReset;
-    document.getElementById('keep').onclick  = softReset;
+    let ending='';
+    if(state.affection>=14){ending=`We end shoulder to shoulder, {name}. The Haven learns our names and keeps them safe.`;}
+    else if(state.affection>=6){ending=`Laughter keeps finding us. “Don’t get cocky,” I murmur—but I’m glowing.`;}
+    else if(state.affection>=-5){ending=`Different tempos, same song. The door was never locked. “Another night, {name}?”`;}
+    else{ending=`A little chilly. “Next time, try listening,” I say gently.`;}
+    say('Narrator',line(ending)+`  (Affection ${state.affection})`);
+    el.choices.innerHTML=`<button class="choice" id="again">Play again</button><button class="choice" id="keep">New run (keep name)</button>`;
+    document.getElementById('again').onclick=hardReset; document.getElementById('keep').onclick=softReset;
   }
 
-  function softReset(){ state.affection=0; state.idx=0; state.mood=rndMood(); state.cat=CATS[0]; save(state); scene(); }
+  function softReset(){state.affection=0;state.idx=0;state.mood=rndMood();state.cat=CATS[0];save(state);scene();}
   function hardReset(){
     localStorage.removeItem(STORAGE_KEY);
-    state.name=''; state.affection=0; state.idx=0; state.mood=rndMood(); state.cat=CATS[0]; state.started=false; state.log=[];
-    el.subtitle.textContent = 'The lock clicks open. Step in and tell me your name.';
+    state.name='';state.affection=0;state.idx=0;state.mood=rndMood();state.cat=CATS[0];state.started=false;state.log=[];
+    el.subtitle.textContent='The lock clicks open. Step in and tell me your name.';
     say('Kate','Welcome, love. Tell me your name so I can whisper it properly.');
-    el.choices.innerHTML = `
-      <div class="row">
-        <input id="nameInput" type="text" maxlength="24" placeholder="Your name"/>
-        <button class="primary" id="startBtn">Enter</button>
-      </div>
-      <div class="tiny">Your name and progress are saved on this device.</div>`;
+    el.choices.innerHTML=`<div class="row"><input id="nameInput" type="text" maxlength="24" placeholder="Your name"/><button class="primary" id="startBtn">Enter</button></div><div class="tiny">Your name and progress are saved on this device.</div>`;
     hookStarter(); setHUD();
   }
 
-  function hookStarter(){
-    const ni = document.getElementById('nameInput');
-    const sb = document.getElementById('startBtn');
-    if(!ni || !sb) return;
-    ni.value = state.name || '';
-    sb.onclick = ()=> start((ni.value||'').trim());
-  }
+  function hookStarter(){const ni=document.getElementById('nameInput');const sb=document.getElementById('startBtn');if(!ni||!sb)return;ni.value=state.name||'';sb.onclick=()=>start((ni.value||'').trim());}
+  function escapeHtml(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 
-  function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) }
+  // ---------- (8) Init & log drawer ----------
+  el.logBtn.onclick=()=>{renderLog();el.drawer.style.display='block';};
+  el.closeBtn.onclick=()=>{el.drawer.style.display='none';};
+  el.exportBtn.onclick=()=>{const txt=state.log.map(l=>`[${new Date(l.t).toLocaleString()}] ${l.who}: ${l.text}`).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain'}));a.download='silken_haven_log.txt';a.click();};
+  el.resetBtn.onclick=hardReset;
 
-  // Log drawer hooks
-  el.logBtn.onclick = ()=>{ renderLog(); el.drawer.style.display='block'; };
-  el.closeBtn.onclick = ()=>{ el.drawer.style.display='none'; };
-  el.exportBtn.onclick = ()=>{
-    const txt = state.log.map(l=>`[${new Date(l.t).toLocaleString()}] ${l.who}: ${l.text}`).join('\n');
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([txt],{type:'text/plain'}));
-    a.download = 'silken_haven_log.txt'; a.click();
-  };
-  el.resetBtn.onclick = hardReset;
-
-  // init
-  if(state.started && state.name){
-    el.subtitle.textContent = `Welcome back, ${state.name}.`;
-    scene();
-  }else{
-    hookStarter();
-  }
+  if(state.started&&state.name){el.subtitle.textContent=`Welcome back, ${state.name}.`;scene();}else{hookStarter();}
 })();
 </script>
 </body>
