@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Silken Haven - Kate RPG</title>
+<style>
+  body {
+    background-color: #111;
+    color: #eee;
+    font-family: 'Trebuchet MS', sans-serif;
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+  }
+  button {
+    background-color: #ff69b4;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  button:hover {
+    background-color: #ff85c1;
+  }
+</style>
+</head>
+<body>
+
+<h1>Silken Haven</h1>
+<p>You open your eyes in a dimly lit room. A warm voice teases from the shadows.</p>
+<p><em>"Took you long enough to wake up, stranger... I’m Kate."</em></p>
+
+<div id="choices">
+  <button onclick="choose(1)">"Who are you?"</button>
+  <button onclick="choose(2)">"Where am I?"</button>
+  <button onclick="choose(3)">Smile and say nothing</button>
+</div>
+
+<p id="response"></p>
+
+<script>
+function choose(option) {
+  let res = "";
+  if(option === 1) {
+    res = '"I’m whoever you need me to be tonight." She smiles knowingly.';
+  } else if(option === 2) {
+    res = '"My place... or yours, if you play your cards right."';
+  } else {
+    res = 'Her lips curl in amusement. "Mysterious. I like that."';
+  }
+  document.getElementById("response").innerHTML = res;
+  document.getElementById("choices").style.display = "none";
+}
+</script>
+
+</body>
+</html>
